@@ -5,6 +5,10 @@ NODE_NAME='node.domain.name'
 AVG_REGS=200
 
 REGS_COUNT=$(/usr/bin/fs_cli -x "show registrations count" | awk '/total/ {print $1}')
+
+# Send metric to NetData via statsd
+echo "sipregscount:$REGS_COUNT|g" | nc -w 1 -u localhost 8125
+
 AMI_MASTER=$(/sbin/ip addr | awk '/scope global dummy0/ {print $2}')
 echo $REGS_COUNT
 echo $AVG_REGS
